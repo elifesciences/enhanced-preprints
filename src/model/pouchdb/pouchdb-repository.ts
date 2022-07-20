@@ -83,12 +83,7 @@ class PouchDBArticleRepository implements ArticleRepository {
   }
 
   async getArticleSummaries(): Promise<ArticleSummary[]> {
-    const { rows } = await this.database.query<ArticleSummary>((doc, emit) => {
-      if (emit === undefined) {
-        return;
-      }
-      emit(doc._id, { doi: doc.doi, title: doc.title, date: doc.date });
-    });
+    const { rows } = await this.database.query<ArticleSummary>('article-summaries/article-summaries');
     return rows.map((row) => ({
       doi: row.value.doi,
       date: new Date(row.value.date),
@@ -98,21 +93,37 @@ class PouchDBArticleRepository implements ArticleRepository {
 }
 
 export const createPouchDBArticleRepository = async (connectionString: string, username: string, password: string) => {
+  let db: PouchDB.Database<StoredArticle>;
   if (connectionString === ':memory:') {
     PouchDB.plugin(MemoryAdapter);
-    return new PouchDBArticleRepository(
-      new PouchDB<StoredArticle>(
-        randomUUID(),
-        { adapter: 'memory' },
-      ),
+
+    db = new PouchDB<StoredArticle>(
+      randomUUID(),
+      { adapter: 'memory' },
     );
+  } else {
+    db = new PouchDB<StoredArticle>(connectionString, {
+      auth: {
+        username,
+        password,
+      },
+    });
   }
-  const eppDb = new PouchDB<StoredArticle>(connectionString, {
-    auth: {
-      username,
-      password,
-    },
+
+  db.get('_design/article-summaries').catch(async (error) => {
+    if (error) {
+      await db.put<any>(
+        {
+          _id: '_design/article-summaries',
+          views: {
+            'article-summaries': {
+              map: 'function (doc) {  emit(doc._id, { doi: doc.doi, title: doc.title, date: doc.date});}',
+            },
+          },
+        },
+      );
+    }
   });
 
-  return new PouchDBArticleRepository(eppDb);
+  return new PouchDBArticleRepository(db);
 };
