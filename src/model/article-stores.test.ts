@@ -4,6 +4,9 @@ const createArticleRepo = async (type: StoreType) => {
   if (type === StoreType.InMemory) {
     return createArticleRepository(StoreType.InMemory);
   }
+  if (type === StoreType.PouchDB) {
+    return createArticleRepository(StoreType.PouchDB, ':memory:');
+  }
   return createArticleRepository(StoreType.Sqlite, ':memory:');
 };
 
@@ -38,7 +41,7 @@ const exampleLicenses = [
 ];
 
 describe('article-stores', () => {
-  describe.each([StoreType.InMemory, StoreType.Sqlite])('Test article store backed by %s', (store) => {
+  describe.each([StoreType.InMemory, StoreType.Sqlite, StoreType.PouchDB])('Test article store backed by %s', (store) => {
     it('stores article', async () => {
       const articleStore = await createArticleRepo(store);
       const stored = await articleStore.storeArticle({

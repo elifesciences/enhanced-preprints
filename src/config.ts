@@ -7,6 +7,9 @@ const getStoreTypeFromString = (repoType: string): StoreType => {
   if (repoType === 'CouchDB') {
     return StoreType.CouchDB;
   }
+  if (repoType === 'PouchDB') {
+    return StoreType.PouchDB;
+  }
   if (repoType === 'InMemory') {
     return StoreType.InMemory;
   }
