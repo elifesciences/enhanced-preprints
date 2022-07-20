@@ -42,8 +42,8 @@ services:
       target: prod
     command: yarn start:dev
     environment:
-      REPO_TYPE: CouchDB
-      REPO_CONNECTION: http://couchdb:5984/
+      REPO_TYPE: PouchDB
+      REPO_CONNECTION: http://couchdb:5984/epp
       REPO_USERNAME: admin
       REPO_PASSWORD: testtest
     ports:
