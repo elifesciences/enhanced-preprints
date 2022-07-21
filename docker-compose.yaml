@@ -1,6 +1,9 @@
 services:
   sass-watch:
     profiles:
+    - inmemory
+    - pouchdb
+    - pouchdb-local
     - couchdb
     - sqlite
     build:
@@ -9,6 +12,62 @@ services:
     command: yarn sass:dev
     volumes:
     - ./src:/opt/epp/src
+    - styles:/opt/epp/public/styles
+
+
+  # inmemory profile
+  app-inmemory:
+    profiles:
+    - inmemory
+    build:
+      context: .
+      target: prod
+    command: yarn start:dev
+    environment:
+      REPO_TYPE: InMemory
+    ports:
+    - "8080:3000"
+    volumes:
+    - ./src:/opt/epp/src
+    - sqlite-data:/opt/epp-data
+    - styles:/opt/epp/public/styles
+
+  # couchdb profile
+  app-pouchdb:
+    profiles:
+    - pouchdb
+    build:
+      context: .
+      target: prod
+    command: yarn start:dev
+    environment:
+      REPO_TYPE: PouchDB
+      REPO_CONNECTION: http://couchdb:5984/epp
+      REPO_USERNAME: admin
+      REPO_PASSWORD: testtest
+    ports:
+    - "8080:3000"
+    volumes:
+    - ./src:/opt/epp/src
+    - sqlite-data:/opt/epp-data
+    - styles:/opt/epp/public/styles
+
+  # couchdb profile
+  app-pouchdb-local:
+    profiles:
+    - pouchdb-local
+    build:
+      context: .
+      target: prod
+    command: yarn start:dev
+    environment:
+      REPO_TYPE: PouchDB
+      REPO_CONNECTION: /opt/epp-data/pouch.db
+    ports:
+    - "8080:3000"
+    volumes:
+    - ./src:/opt/epp/src
+    - sqlite-data:/opt/epp-data
     - styles:/opt/epp/public/styles
 
   # SQLite profile
@@ -42,8 +101,8 @@ services:
       target: prod
     command: yarn start:dev
     environment:
-      REPO_TYPE: PouchDB
-      REPO_CONNECTION: http://couchdb:5984/epp
+      REPO_TYPE: CouchDB
+      REPO_CONNECTION: http://couchdb:5984/
       REPO_USERNAME: admin
       REPO_PASSWORD: testtest
     ports:
@@ -55,6 +114,7 @@ services:
   couchdb:
     profiles:
     - couchdb
+    - pouchdb
     image: couchdb
     environment:
       COUCHDB_USER: admin
@@ -73,6 +133,7 @@ services:
   create-database:
     profiles:
     - couchdb
+    - pouchdb
     depends_on:
       couchdb:
         condition: service_healthy
