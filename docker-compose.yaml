@@ -6,6 +6,7 @@ services:
     - pouchdb-local
     - couchdb
     - sqlite
+    - mongodb
     build:
       context: .
       target: prod
@@ -140,7 +141,36 @@ services:
     image: curlimages/curl
     entrypoint: sh
     command: -c 'sleep 5; curl -X PUT -u admin:testtest http://couchdb:5984/epp; curl -X PUT -u admin:testtest http://couchdb:5984/_users'
+
+
+  # mongodb profile
+  app-mongodb:
+    profiles:
+    - mongodb
+    build:
+      context: .
+      target: prod
+    command: yarn start:dev
+    environment:
+      REPO_TYPE: MongoDB
+      REPO_CONNECTION: mongodb://admin:testtest@mongodb:27017/
+    ports:
+    - "8080:3000"
+    volumes:
+    - ./src:/opt/epp/src
+    - styles:/opt/epp/public/styles
+  mongodb:
+    profiles:
+    - mongodb
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: testtest
+    volumes:
+    - mongodb-data:/home/couchdb/data
+
 volumes:
   sqlite-data:
   couchdb-data:
+  mongodb-data:
   styles:

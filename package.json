@@ -40,6 +40,7 @@
     "express": "^4.17.2",
     "jsdom": "^19.0.0",
     "marked": "^4.0.12",
+    "mongodb": "^4.8.0",
     "nano": "^10.0.0",
     "pouchdb": "^7.3.0",
     "pouchdb-adapter-memory": "^7.3.0",

@@ -13,6 +13,9 @@ const getStoreTypeFromString = (repoType: string): StoreType => {
   if (repoType === 'InMemory') {
     return StoreType.InMemory;
   }
+  if (repoType === 'MongoDB') {
+    return StoreType.MongoDB;
+  }
 
   // eslint-disable-next-line no-console
   console.log(`Cannot find article repository type of ${repoType}, defaulting to InMemory`);
