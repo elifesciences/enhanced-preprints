@@ -59,13 +59,16 @@ class MongoDBArticleRepository implements ArticleRepository {
 
   async getArticleSummaries(): Promise<ArticleSummary[]> {
     const results = await this.collection.find({}).project<ArticleSummary>({
-      _id: 0,
       doi: 1,
       date: 1,
       title: 1,
     });
 
-    return results.toArray();
+    return (await results.toArray()).map<ArticleSummary>((doc) => ({
+      doi: doc.doi,
+      date: new Date(doc.date),
+      title: doc.title,
+    }));
   }
 }
 
