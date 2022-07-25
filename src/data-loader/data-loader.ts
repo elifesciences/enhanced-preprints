@@ -85,8 +85,8 @@ const processXml = async (file: PreprintXmlFile): Promise<ArticleContent> => {
   const doi = dois[0].value;
 
   // HACK: replace all locally referenced files with a relative URL path
-  json = json.replaceAll(dirname(realpathSync(file)), `/article/${doi}/external`);
-  html = html.replaceAll(dirname(realpathSync(file)), `/article/${doi}/external`);
+  json = json.replaceAll(dirname(realpathSync(file)), `/article/${doi}/attachment`);
+  html = html.replaceAll(dirname(realpathSync(file)), `/article/${doi}/attachment`);
 
   // extract HTML content without header
   const content = extractArticleHtmlWithoutHeader(JSDOM.fragment(html));
