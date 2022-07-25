@@ -1,5 +1,11 @@
-import { existsSync, readdirSync, readFileSync, realpathSync } from 'fs';
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  realpathSync,
+} from 'fs';
 import { JSDOM } from 'jsdom';
+import { dirname } from 'path';
 import { convertJatsToHtml, convertJatsToJson, PreprintXmlFile } from './conversion/encode';
 import {
   ArticleRepository,
@@ -8,8 +14,6 @@ import {
   ArticleContent,
 } from '../model/model';
 import { Content, HeadingContent } from '../model/content';
-import { dirname, normalize } from 'path';
-import { cwd } from 'process';
 
 // type related to the JSON output of encoda
 type Address = {
