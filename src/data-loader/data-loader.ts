@@ -81,7 +81,6 @@ const processXml = async (file: PreprintXmlFile): Promise<ArticleContent> => {
   const xml = readFileSync(file).toString();
   const html = await convertJatsToHtml(file);
   const json = await convertJatsToJson(file);
-
   const articleStruct = JSON.parse(json) as ArticleStruct;
 
   // extract DOI
