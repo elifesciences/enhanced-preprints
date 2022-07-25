@@ -15,7 +15,7 @@ describe('encode', () => {
         to: 'html',
         encodeOptions: {
           isStandalone: false,
-          isBundle: true,
+          isBundle: false,
         },
       });
     });
