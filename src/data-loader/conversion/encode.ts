@@ -11,7 +11,7 @@ export const convertJatsToHtml = async (file: PreprintXmlFile): Promise<string> 
       to: 'html',
       encodeOptions: {
         isStandalone: false,
-        isBundle: true,
+        isBundle: false,
       },
     },
   );
@@ -27,7 +27,7 @@ export const convertJatsToJson = async (file: PreprintXmlFile): Promise<string> 
       from: 'jats',
       to: 'json',
       encodeOptions: {
-        isBundle: true,
+        isBundle: false,
       },
     },
   );

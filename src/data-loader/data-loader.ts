@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, realpathSync } from 'fs';
 import { JSDOM } from 'jsdom';
 import { convertJatsToHtml, convertJatsToJson, PreprintXmlFile } from './conversion/encode';
 import {
@@ -8,6 +8,8 @@ import {
   ArticleContent,
 } from '../model/model';
 import { Content, HeadingContent } from '../model/content';
+import { dirname, normalize } from 'path';
+import { cwd } from 'process';
 
 // type related to the JSON output of encoda
 type Address = {
@@ -73,13 +75,18 @@ const extractArticleHtmlWithoutHeader = (articleDom: DocumentFragment): string =
 
 const processXml = async (file: PreprintXmlFile): Promise<ArticleContent> => {
   const xml = readFileSync(file).toString();
-  const html = await convertJatsToHtml(file);
-  const json = await convertJatsToJson(file);
+  let html = await convertJatsToHtml(file);
+  let json = await convertJatsToJson(file);
+
   const articleStruct = JSON.parse(json) as ArticleStruct;
 
   // extract DOI
   const dois = articleStruct.identifiers.filter((identifier) => identifier.name === 'doi');
   const doi = dois[0].value;
+
+  // HACK: replace all locally referenced files with a relative URL path
+  json = json.replaceAll(dirname(realpathSync(file)), `/article/${doi}/external`);
+  html = html.replaceAll(dirname(realpathSync(file)), `/article/${doi}/external`);
 
   // extract HTML content without header
   const content = extractArticleHtmlWithoutHeader(JSDOM.fragment(html));
