@@ -79,8 +79,8 @@ const extractArticleHtmlWithoutHeader = (articleDom: DocumentFragment): string =
 
 const processXml = async (file: PreprintXmlFile): Promise<ArticleContent> => {
   const xml = readFileSync(file).toString();
-  let html = await convertJatsToHtml(file);
-  let json = await convertJatsToJson(file);
+  const html = await convertJatsToHtml(file);
+  const json = await convertJatsToJson(file);
 
   const articleStruct = JSON.parse(json) as ArticleStruct;
 
@@ -89,17 +89,17 @@ const processXml = async (file: PreprintXmlFile): Promise<ArticleContent> => {
   const doi = dois[0].value;
 
   // HACK: replace all locally referenced files with a relative URL path
-  json = json.replaceAll(dirname(realpathSync(file)), `/article/${doi}/attachment`);
-  html = html.replaceAll(dirname(realpathSync(file)), `/article/${doi}/attachment`);
+  const correctedJson = json.replaceAll(dirname(realpathSync(file)), `/article/${doi}/attachment`);
+  const correctedHtml = html.replaceAll(dirname(realpathSync(file)), `/article/${doi}/attachment`);
 
   // extract HTML content without header
-  const content = extractArticleHtmlWithoutHeader(JSDOM.fragment(html));
+  const content = extractArticleHtmlWithoutHeader(JSDOM.fragment(correctedHtml));
 
   return {
     doi,
     xml,
     html: content,
-    document: json,
+    document: correctedJson,
   };
 };
 
