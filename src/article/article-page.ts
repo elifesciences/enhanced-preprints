@@ -1,11 +1,13 @@
-import { ProcessedArticle } from '../model/model';
+import { Heading, ProcessedArticle } from '../model/model';
 import { jumpToMenu } from './jump-menu';
 import { header } from './header';
 import { articleDetails } from './article-details';
 import { evaluationSummary } from './article-evaluation-summary';
 
 export const articlePage = (article: ProcessedArticle, noHeader: boolean): string => {
-  const headings = article.headings.concat(...[{ id: 'evaluation-summary', text: 'eLife review summary' }, { id: 'abstract', text: 'Abstract' }]);
+  const headings: Heading[] = [{ id: 'evaluation-summary', text: 'eLife review summary' }, { id: 'abstract', text: 'Abstract' }];
+  headings.push(...article.headings);
+
   return `${header(article)}
   <main class="primary-column">
     <div class="table-contents">

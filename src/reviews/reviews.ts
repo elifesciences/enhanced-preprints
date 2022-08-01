@@ -50,7 +50,7 @@ const wrapWithHtml = (editorsAndReviewersSection: string, reviews: string, artic
           Read about eLife’s peer review process
         </a>
       </div>
-      <div>
+      <div class="summary">
         <h2 class="summary-title" id="evaluation-summary">Evaluation summary</h2>
         <p class="summary-text">
           This is a <span class="summary-text__highlight">landmark</span> paper and a <span class="summary-text__highlight">tour-de-force</span> that ties together decades of advances in electron microscopy

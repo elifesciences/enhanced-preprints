@@ -87,12 +87,12 @@
 
 .review-list {
   list-style: none;
-  padding: 0;
+  padding: 18px 0 0;
   font-family: settings.$font-family-primary;
 }
 
 .review-list__item {
-  padding-top: 1rem;
+  margin-bottom: 42px;
 }
 
 .review-list__item:first-child {
@@ -106,6 +106,10 @@
 .review-list-content {
   p {
     @include typography.body();
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   strong {
@@ -138,6 +142,10 @@
 
 .return-button__icon {
   @include buttons.button-icon();
+}
+
+.summary {
+  margin-bottom: 36px;
 }
 
 .summary-title {
@@ -178,15 +186,21 @@
   color: white;
 }
 
+.editors-and-reviewers {
+  margin-bottom: 36px;
+  padding-top: 18px;
+}
+
 .editors-and-reviewers__header {
   @include typography.heading-2();
+  margin: 0;
 }
 
 .editors-and-reviewers__list {
   list-style: none;
-  margin: 0;
   padding: 0;
   @include typography.editors-and-reviewers-list-text();
+  margin: 0 0 36px;
 }
 
 .editors-and-reviewers__person {

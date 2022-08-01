@@ -24,6 +24,17 @@ img {
   h4 {
     @include typography.heading-4();
   }
+
+  article a {
+    border-bottom: 1px dotted settings.$color-near-black;
+    color: settings.$color-near-black;
+    text-decoration: none;
+
+    &:hover {
+      border-bottom-color: settings.$color-emphasis;
+      color: settings.$color-emphasis;
+    }
+  }
 }
 
 .jump-menu-container {
