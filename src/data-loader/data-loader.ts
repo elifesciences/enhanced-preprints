@@ -1,5 +1,11 @@
-import { existsSync, readdirSync, readFileSync } from 'fs';
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  realpathSync,
+} from 'fs';
 import { JSDOM } from 'jsdom';
+import { dirname } from 'path';
 import { convertJatsToHtml, convertJatsToJson, PreprintXmlFile } from './conversion/encode';
 import {
   ArticleRepository,
@@ -81,14 +87,18 @@ const processXml = async (file: PreprintXmlFile): Promise<ArticleContent> => {
   const dois = articleStruct.identifiers.filter((identifier) => identifier.name === 'doi');
   const doi = dois[0].value;
 
+  // HACK: replace all locally referenced files with a relative URL path
+  const correctedJson = json.replaceAll(dirname(realpathSync(file)), `/article/${doi}/attachment`);
+  const correctedHtml = html.replaceAll(dirname(realpathSync(file)), `/article/${doi}/attachment`);
+
   // extract HTML content without header
-  const content = extractArticleHtmlWithoutHeader(JSDOM.fragment(html));
+  const content = extractArticleHtmlWithoutHeader(JSDOM.fragment(correctedHtml));
 
   return {
     doi,
     xml,
     html: content,
-    document: json,
+    document: correctedJson,
   };
 };
 

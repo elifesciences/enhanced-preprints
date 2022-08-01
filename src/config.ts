@@ -24,4 +24,5 @@ export const config = {
   repoConnection: process.env.REPO_CONNECTION ?? './data.db',
   repoUserName: process.env.REPO_USERNAME ?? '',
   repoPassword: process.env.REPO_PASSWORD ?? '',
+  iiifServer: process.env.IIF_SERVER ?? '',
 };

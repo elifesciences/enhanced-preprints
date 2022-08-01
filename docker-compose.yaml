@@ -33,6 +33,7 @@ services:
     command: yarn start:dev
     environment:
       REPO_CONNECTION: /opt/epp-data/data.db
+      IIF_SERVER: http://localhost:8182
     ports:
     - "8080:3000"
     volumes:
