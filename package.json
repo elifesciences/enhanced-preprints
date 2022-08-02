@@ -40,7 +40,8 @@
     "marked": "^4.0.12",
     "nano": "^10.0.0",
     "sqlite": "^4.1.1",
-    "sqlite3": "^5.0.6"
+    "sqlite3": "^5.0.6",
+    "winston": "^3.8.1"
   },
   "scripts": {
     "start": "ts-node src/server.ts",

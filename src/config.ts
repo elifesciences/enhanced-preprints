@@ -1,4 +1,5 @@
 import { StoreType } from './model/create-article-repository';
+import { logger } from './utils/logger';
 
 const getStoreTypeFromString = (repoType: string): StoreType => {
   if (repoType === 'Sqlite') {
@@ -11,8 +12,7 @@ const getStoreTypeFromString = (repoType: string): StoreType => {
     return StoreType.InMemory;
   }
 
-  // eslint-disable-next-line no-console
-  console.log(`Cannot find article repository type of ${repoType}, defaulting to InMemory`);
+  logger.error(`Cannot find article repository type of ${repoType}, defaulting to InMemory`);
   return StoreType.InMemory;
 };
 

@@ -8,6 +8,7 @@ import { loadXmlArticlesFromDirIntoStores } from './data-loader/data-loader';
 import { createEnhancedArticleGetter, GetEnhancedArticle } from './reviews/get-enhanced-article';
 import { createArticleRepository } from './model/create-article-repository';
 import { config } from './config';
+import { logger } from './utils/logger';
 
 const app = express();
 
@@ -17,8 +18,7 @@ createArticleRepository(config.repoType, config.repoConnection, config.repoUserN
   articleRepository = repo;
   getEnhancedArticle = createEnhancedArticleGetter(articleRepository, config.id);
   app.listen(3000, () => {
-    // eslint-disable-next-line no-console
-    console.log('Example app listening on port 3000');
+    logger.info('Example app listening on port 3000');
   });
 });
 
